@@ -21,6 +21,7 @@ java_import org.newdawn.slick.Color
 # application files
 require 'board'
 require 'monster'
+require 'character'
 
 class Demo < BasicGame
   # Due to how Java decides which method to call based on its
@@ -34,6 +35,10 @@ class Demo < BasicGame
     $board.add_entity goblin.dup.tap{|g| g.move(3,9)}
     $board.add_entity goblin.dup.tap{|g| g.move(1,4)}
     $board.add_entity goblin.dup.tap{|g| g.move(1,7)}
+
+    warrior = Character.new name: 'warrior', image_path: 'assets/warrior.png'
+
+    $board.add_entity warrior.dup.tap{|w| w.move(18,5)}
   end
 
   def render(container, graphics)
