@@ -23,17 +23,34 @@ class Board
     @entities << entity
   end
 
+  def select_tile(x, y, container)
+    tile_x = x/tile_width(container)
+    tile_y = y/tile_height(container)
+
+    @selected_tile = [tile_x, tile_y]
+  end
+
   private
 
   def render_tiles(container, graphics)
+    prev_color = graphics.getColor
+
     th = tile_height(container)
     tw = tile_width(container)
 
     @height.times do |y|
       @width.times do |x|
-        graphics.draw_rect x*tw, y*th, tw, th
+        if @selected_tile == [x, y]
+          graphics.setColor Color.red
+        else
+          graphics.setColor Color.gray
+        end
+
+        graphics.draw_rect x*tw, y*th, tw-2, th-2
       end
     end
+
+    graphics.setColor prev_color
   end
 
   def tile_width(container)

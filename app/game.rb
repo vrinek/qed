@@ -16,6 +16,7 @@ java_import org.newdawn.slick.Input
 java_import org.newdawn.slick.SlickException
 java_import org.newdawn.slick.AppGameContainer
 java_import org.newdawn.slick.Image
+java_import org.newdawn.slick.Color
 
 # application files
 require 'board'
@@ -38,13 +39,22 @@ class Demo < BasicGame
   def render(container, graphics)
     $board.render(container, graphics)
 
-    graphics.draw_string('JRuby Demo (ESC to exit)', 8, container.height - 30)
+    graphics.draw_string('JRuby Demo (Q to quit)', 8, container.height - 30)
   end
 
   def update(container, delta)
     # Grab input and exit if escape is pressed
     input = container.get_input
-    container.exit if input.is_key_down(Input::KEY_ESCAPE)
+
+    case
+    when input.is_key_down(Input::KEY_Q)
+      container.exit
+    when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
+      x = input.get_mouse_x
+      y = input.get_mouse_y
+
+      $board.select_tile(x, y, container)
+    end
   end
 end
 
