@@ -9,5 +9,9 @@ module Movable
     @x, @y = x, y
   end
 
+  def in?(x, y)
+    @x == x && @y == y
+  end
+
   class OutOfBoard < Exception; end
 end

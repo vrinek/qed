@@ -32,13 +32,13 @@ class Demo < BasicGame
 
     goblin = Monster.new(name: 'goblin', image_path: 'assets/goblin.png')
 
-    $board.add_entity goblin.dup.tap{|g| g.move(3,9)}
-    $board.add_entity goblin.dup.tap{|g| g.move(1,4)}
-    $board.add_entity goblin.dup.tap{|g| g.move(1,7)}
+    $board << goblin.dup.tap{|g| g.move(3,9)}
+    $board << goblin.dup.tap{|g| g.move(1,4)}
+    $board << goblin.dup.tap{|g| g.move(1,7)}
 
     warrior = Character.new name: 'warrior', image_path: 'assets/warrior.png'
 
-    $board.add_entity warrior.dup.tap{|w| w.move(18,5)}
+    $board << warrior.dup.tap{|w| w.move(18,5)}
   end
 
   def render(container, graphics)
@@ -54,12 +54,9 @@ class Demo < BasicGame
     case
     when input.is_key_down(Input::KEY_Q)
       container.exit
-    when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
-      x = input.get_mouse_x
-      y = input.get_mouse_y
-
-      $board.select_tile(x, y, container)
     end
+
+    $board.update(container, delta)
   end
 end
 

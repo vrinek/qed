@@ -5,7 +5,7 @@ class Board
     @width = options.delete(:width) || 20
     @height = options.delete(:height) || 10
 
-    @entities = []
+    @entities = Array.new(@width){Array.new(@height)}
   end
 
   def render(container, graphics)
@@ -14,23 +14,63 @@ class Board
     th = tile_height(container)
     tw = tile_width(container)
 
-    @entities.each do |entity|
+    @entities.flatten.compact.each do |entity|
       entity.image.draw entity.x*tw, entity.y*th, tw, th
     end
   end
 
-  def add_entity(entity)
-    @entities << entity
+  def <<(entity)
+    @entities[entity.x][entity.y] = entity
   end
 
-  def select_tile(x, y, container)
-    tile_x = x/tile_width(container)
-    tile_y = y/tile_height(container)
+  def update(container, delta)
+    input = container.get_input
 
-    @selected_tile = [tile_x, tile_y]
+    case
+    when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
+      x = input.get_mouse_x
+      y = input.get_mouse_y
+
+      click_tile(x, y, container)
+    end
+
+    update_entity_positions!
   end
 
   private
+
+  def update_entity_positions!
+    @entities.each_with_index do |row, x|
+      row.each_with_index do |entity, y|
+        if entity && !entity.in?(x, y)
+          @entities[x][y] = nil
+          self << entity
+        end
+      end
+    end
+  end
+
+  def click_tile(x, y, container)
+    tile_x = x/tile_width(container)
+    tile_y = y/tile_height(container)
+
+    if selected_entity
+      # we had something selected, so we move it
+      selected_entity.move(tile_x, tile_y)
+      @selected_tile = nil
+    else
+      @selected_tile = [tile_x, tile_y]
+    end
+  end
+
+  def selected_entity
+    if @selected_tile
+      x, y = @selected_tile
+      @entities[x][y]
+    else
+      nil
+    end
+  end
 
   def render_tiles(container, graphics)
     prev_color = graphics.getColor
