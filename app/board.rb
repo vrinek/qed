@@ -1,7 +1,7 @@
 require 'tile'
 
 class Board
-  attr_reader :width, :height
+  attr_reader :width, :height, :selected_tile
 
   def initialize(options = {})
     @width = options.delete(:width) || 20
@@ -15,13 +15,8 @@ class Board
   end
 
   def render(container, graphics)
-    render_tiles(container, graphics)
-
-    th = tile_height(container)
-    tw = tile_width(container)
-
-    @tiles.flatten.map(&:entity).compact.each do |entity|
-      entity.image.draw entity.x*tw, entity.y*th, tw, th
+    @tiles.flatten.each do |tile|
+      tile.render(container, graphics)
     end
   end
 
@@ -49,6 +44,10 @@ class Board
     @tiles[x][y].occupied?
   end
 
+  def selected_entity
+    @selected_tile && @selected_tile.entity
+  end
+
   private
 
   def update_entity_positions!
@@ -71,8 +70,8 @@ class Board
   end
 
   def left_click_tile(x, y, container)
-    tile_x = x/tile_width(container)
-    tile_y = y/tile_height(container)
+    tile_x = x/Tile.width(container)
+    tile_y = y/Tile.height(container)
 
     if selected_entity
       # we had something selected, so we move it
@@ -90,8 +89,8 @@ class Board
   end
 
   def right_click_tile(x, y, container)
-    tile_x = x/tile_width(container)
-    tile_y = y/tile_height(container)
+    tile_x = x/Tile.width(container)
+    tile_y = y/Tile.height(container)
     target_entity = @tiles[tile_x][tile_y].entity
 
     if selected_entity && target_entity
@@ -103,44 +102,5 @@ class Board
     end
 
     remove_dead_entities!
-  end
-
-  def selected_entity
-    @selected_tile && @selected_tile.entity
-  end
-
-  def render_tiles(container, graphics)
-    prev_color = graphics.getColor
-
-    th = tile_height(container)
-    tw = tile_width(container)
-
-    @height.times do |y|
-      @width.times do |x|
-        if @selected_tile == @tiles[x][y]
-          graphics.setColor Color.green
-        elsif selected_entity &&
-          selected_entity.in_range?(x, y, selected_entity.atk_range)
-
-          graphics.setColor Color.red
-        elsif selected_entity && selected_entity.in_range?(x, y)
-          graphics.setColor Color.blue
-        else
-          graphics.setColor Color.gray
-        end
-
-        graphics.draw_rect x*tw, y*th, tw-2, th-2
-      end
-    end
-
-    graphics.setColor prev_color
-  end
-
-  def tile_width(container)
-    container.width / @width
-  end
-
-  def tile_height(container)
-    container.height / @height
   end
 end
