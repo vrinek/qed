@@ -70,13 +70,12 @@ class Board
   end
 
   def left_click_tile(x, y, container)
-    tile_x = x/Tile.width(container)
-    tile_y = y/Tile.height(container)
+    clicked_tile = tile_in(x, y, container)
 
     if selected_entity
       # we had something selected, so we move it
       begin
-        selected_entity.move(tile_x, tile_y)
+        selected_entity.move(clicked_tile.x, clicked_tile.y)
         # keep the entity selected
       rescue Movable::OutOfRange
         # deselect the entity and select the clicked tile
@@ -85,13 +84,12 @@ class Board
       end
     end
 
-    @selected_tile = @tiles[tile_x][tile_y]
+    @selected_tile = clicked_tile
   end
 
   def right_click_tile(x, y, container)
-    tile_x = x/Tile.width(container)
-    tile_y = y/Tile.height(container)
-    target_entity = @tiles[tile_x][tile_y].entity
+    clicked_tile = tile_in(x, y, container)
+    target_entity = clicked_tile.entity
 
     if selected_entity && target_entity
       begin
@@ -102,5 +100,13 @@ class Board
     end
 
     remove_dead_entities!
+  end
+
+  # return tile by absolute screen position
+  def tile_in(x, y, container)
+    tile_x = x/Tile.width(container)
+    tile_y = y/Tile.height(container)
+
+    @tiles[tile_x][tile_y]
   end
 end
