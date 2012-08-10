@@ -33,6 +33,7 @@ class Demo < BasicGame
     goblin = Monster.new(name: 'goblin', image_path: 'assets/goblin.png')
     goblin.range = 4
     goblin.atk_mod = 6
+    goblin.atk_range = 1
     goblin.dmg_dice = 6
     goblin.dmg_mod = 5
     goblin.ac = 15
@@ -45,6 +46,7 @@ class Demo < BasicGame
     warrior = Character.new name: 'warrior', image_path: 'assets/warrior.png'
     warrior.range = 3
     warrior.atk_mod = 4
+    warrior.atk_range = 1
     warrior.dmg_dice = 10
     warrior.dmg_mod = 2
     warrior.ac = 15

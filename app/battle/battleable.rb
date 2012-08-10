@@ -2,10 +2,18 @@ require 'battle/attack_dice'
 require 'battle/damage_dice'
 
 module Battleable
-  attr_accessor :atk_mod, :dmg_dice, :dmg_mod, :ac, :hp
+  attr_accessor :atk_mod, :atk_range
+  attr_accessor :dmg_dice, :dmg_mod
+  attr_accessor :ac, :hp
 
   def attack!(entity)
-    raise NotAttackable unless entity.respond_to?(:hp)
+    if !entity.respond_to?(:hp)
+      raise NotAttackable
+    end
+
+    if !in_range?(entity.x, entity.y, @atk_range)
+      raise OutOfAttackRange
+    end
 
     entity.take_dmg!(dmg_to(entity))
   end
@@ -27,5 +35,6 @@ module Battleable
     hp <= 0
   end
 
+  class OutOfAttackRange < Exception; end
   class NotAttackable < Exception; end
 end

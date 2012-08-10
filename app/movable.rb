@@ -23,8 +23,8 @@ module Movable
     @x == x && @y == y
   end
 
-  def in_range?(x, y)
-    distance(x, y) <= range
+  def in_range?(x, y, range = nil)
+    distance(x, y) <= (range || self.range)
   end
 
   # Square distance

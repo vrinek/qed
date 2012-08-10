@@ -98,7 +98,10 @@ class Board
     target_entity = @entities[tile_x][tile_y]
 
     if selected_entity && target_entity
-      selected_entity.attack!(target_entity)
+      begin
+        selected_entity.attack!(target_entity)
+      rescue Battleable::OutOfAttackRange
+      end
     end
 
     remove_dead_entities!
