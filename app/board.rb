@@ -42,6 +42,10 @@ class Board
     update_entity_positions!
   end
 
+  def occupied_tile?(x, y)
+    !!@entities[x][y]
+  end
+
   private
 
   def update_entity_positions!
@@ -79,6 +83,9 @@ class Board
       rescue Movable::OutOfRange
         # deselect the entity
         @selected_tile = nil
+      rescue Movable::OccupiedTile
+        # select the clicked tile
+        @selected_tile = [tile_x, tile_y]
       end
     else
       @selected_tile = [tile_x, tile_y]

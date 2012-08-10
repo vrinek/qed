@@ -7,6 +7,10 @@ module Movable
       raise OutOfBoard
     end
 
+    if $board.occupied_tile?(x, y)
+      raise OccupiedTile
+    end
+
     # @x and @y are nil when the Movable object has first been initialized
     if @x && @y && !in_range?(x, y)
       raise OutOfRange
@@ -30,4 +34,5 @@ module Movable
 
   class OutOfBoard < Exception; end
   class OutOfRange < Exception; end
+  class OccupiedTile < Exception; end
 end
