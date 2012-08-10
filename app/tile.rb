@@ -10,19 +10,11 @@ class Tile
     !!@entity
   end
 
-  def render(container, graphics)
-    prev_color = graphics.getColor
+  def render(container, graphics, tw, th)
     graphics.setColor(color)
-
-    th = Tile.height(container)
-    tw = Tile.width(container)
-
     graphics.draw_rect x*tw, y*th, tw-2, th-2
-    graphics.setColor prev_color
 
-    if entity
-      entity.image.draw entity.x*tw, entity.y*th, tw, th
-    end
+    entity.image.draw(entity.x*tw, entity.y*th, tw, th) if entity
   end
 
   def self.width(container)

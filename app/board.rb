@@ -15,9 +15,16 @@ class Board
   end
 
   def render(container, graphics)
+    prev_color = graphics.getColor
+
+    th = Tile.height(container)
+    tw = Tile.width(container)
+
     @tiles.flatten.each do |tile|
-      tile.render(container, graphics)
+      tile.render(container, graphics, tw, th)
     end
+
+    graphics.setColor prev_color
   end
 
   def <<(entity)
