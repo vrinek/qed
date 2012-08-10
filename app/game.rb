@@ -32,6 +32,11 @@ class Demo < BasicGame
 
     goblin = Monster.new(name: 'goblin', image_path: 'assets/goblin.png')
     goblin.range = 4
+    goblin.atk_mod = 6
+    goblin.dmg_dice = 6
+    goblin.dmg_mod = 5
+    goblin.ac = 15
+    goblin.hp = 30
 
     $board << goblin.dup.tap{|g| g.move(3,9)}
     $board << goblin.dup.tap{|g| g.move(1,4)}
@@ -39,6 +44,11 @@ class Demo < BasicGame
 
     warrior = Character.new name: 'warrior', image_path: 'assets/warrior.png'
     warrior.range = 3
+    warrior.atk_mod = 4
+    warrior.dmg_dice = 10
+    warrior.dmg_mod = 2
+    warrior.ac = 15
+    warrior.hp = 24
 
     $board << warrior.dup.tap{|w| w.move(18,5)}
   end

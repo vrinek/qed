@@ -31,7 +31,12 @@ class Board
       x = input.get_mouse_x
       y = input.get_mouse_y
 
-      click_tile(x, y, container)
+      left_click_tile(x, y, container)
+    when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
+      x = input.get_mouse_x
+      y = input.get_mouse_y
+
+      right_click_tile(x, y, container)
     end
 
     update_entity_positions!
@@ -50,7 +55,17 @@ class Board
     end
   end
 
-  def click_tile(x, y, container)
+  def remove_dead_entities!
+    @entities.each_with_index do |row, x|
+      row.each_with_index do |entity, y|
+        if entity.respond_to?(:dead?) && entity.dead?
+          @entities[x][y] = nil
+        end
+      end
+    end
+  end
+
+  def left_click_tile(x, y, container)
     tile_x = x/tile_width(container)
     tile_y = y/tile_height(container)
 
@@ -68,6 +83,18 @@ class Board
     else
       @selected_tile = [tile_x, tile_y]
     end
+  end
+
+  def right_click_tile(x, y, container)
+    tile_x = x/tile_width(container)
+    tile_y = y/tile_height(container)
+    target_entity = @entities[tile_x][tile_y]
+
+    if selected_entity && target_entity
+      selected_entity.attack!(target_entity)
+    end
+
+    remove_dead_entities!
   end
 
   def selected_entity
