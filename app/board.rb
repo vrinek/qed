@@ -1,3 +1,5 @@
+require 'tile'
+
 class Board
   attr_reader :width, :height
 
@@ -5,7 +7,11 @@ class Board
     @width = options.delete(:width) || 20
     @height = options.delete(:height) || 10
 
-    @entities = Array.new(@width){Array.new(@height)}
+    @tiles = Array.new(@width) do |x|
+      Array.new(@height) do |y|
+        Tile.new(x, y)
+      end
+    end
   end
 
   def render(container, graphics)
@@ -14,13 +20,13 @@ class Board
     th = tile_height(container)
     tw = tile_width(container)
 
-    @entities.flatten.compact.each do |entity|
+    @tiles.flatten.map(&:entity).compact.each do |entity|
       entity.image.draw entity.x*tw, entity.y*th, tw, th
     end
   end
 
   def <<(entity)
-    @entities[entity.x][entity.y] = entity
+    @tiles[entity.x][entity.y].entity = entity
   end
 
   def update(container, delta)
@@ -40,28 +46,26 @@ class Board
   end
 
   def occupied_tile?(x, y)
-    !!@entities[x][y]
+    @tiles[x][y].occupied?
   end
 
   private
 
   def update_entity_positions!
-    @entities.each_with_index do |row, x|
-      row.each_with_index do |entity, y|
-        if entity && !entity.in?(x, y)
-          @entities[x][y] = nil
-          self << entity
-        end
+    @tiles.flatten.each do |tile|
+      entity = tile.entity
+
+      if entity && !entity.in?(tile.x, tile.y)
+        tile.entity = nil
+        self << entity
       end
     end
   end
 
   def remove_dead_entities!
-    @entities.each_with_index do |row, x|
-      row.each_with_index do |entity, y|
-        if entity.respond_to?(:dead?) && entity.dead?
-          @entities[x][y] = nil
-        end
+    @tiles.flatten.each do |tile|
+      if tile.entity.respond_to?(:dead?) && tile.entity.dead?
+        tile.entity = nil
       end
     end
   end
@@ -74,25 +78,21 @@ class Board
       # we had something selected, so we move it
       begin
         selected_entity.move(tile_x, tile_y)
-
         # keep the entity selected
-        @selected_tile = [tile_x, tile_y]
       rescue Movable::OutOfRange
-        # deselect the entity
-        @selected_tile = nil
+        # deselect the entity and select the clicked tile
       rescue Movable::OccupiedTile
-        # select the clicked tile
-        @selected_tile = [tile_x, tile_y]
+        # deselect the current entity and select the clicked tile
       end
-    else
-      @selected_tile = [tile_x, tile_y]
     end
+
+    @selected_tile = @tiles[tile_x][tile_y]
   end
 
   def right_click_tile(x, y, container)
     tile_x = x/tile_width(container)
     tile_y = y/tile_height(container)
-    target_entity = @entities[tile_x][tile_y]
+    target_entity = @tiles[tile_x][tile_y].entity
 
     if selected_entity && target_entity
       begin
@@ -106,12 +106,7 @@ class Board
   end
 
   def selected_entity
-    if @selected_tile
-      x, y = @selected_tile
-      @entities[x][y]
-    else
-      nil
-    end
+    @selected_tile && @selected_tile.entity
   end
 
   def render_tiles(container, graphics)
@@ -122,7 +117,7 @@ class Board
 
     @height.times do |y|
       @width.times do |x|
-        if @selected_tile == [x, y]
+        if @selected_tile == @tiles[x][y]
           graphics.setColor Color.green
         elsif selected_entity &&
           selected_entity.in_range?(x, y, selected_entity.atk_range)
