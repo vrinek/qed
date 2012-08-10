@@ -10,6 +10,31 @@ class Tile
     !!@entity
   end
 
+  def render(container, graphics)
+    prev_color = graphics.getColor
+    graphics.setColor(color)
+
+    th = Tile.height(container)
+    tw = Tile.width(container)
+
+    graphics.draw_rect x*tw, y*th, tw-2, th-2
+    graphics.setColor prev_color
+
+    if entity
+      entity.image.draw entity.x*tw, entity.y*th, tw, th
+    end
+  end
+
+  def self.width(container)
+    container.width / $board.width
+  end
+
+  def self.height(container)
+    container.height / $board.height
+  end
+
+  private
+
   def selected?
     $board.selected_tile == self
   end
@@ -35,28 +60,5 @@ class Tile
     else
       Color.gray
     end
-  end
-
-  def render(container, graphics)
-    prev_color = graphics.getColor
-    graphics.setColor(self.color)
-
-    th = Tile.height(container)
-    tw = Tile.width(container)
-
-    graphics.draw_rect x*tw, y*th, tw-2, th-2
-    graphics.setColor prev_color
-
-    if entity
-      entity.image.draw entity.x*tw, entity.y*th, tw, th
-    end
-  end
-
-  def self.width(container)
-    container.width / $board.width
-  end
-
-  def self.height(container)
-    container.height / $board.height
   end
 end
