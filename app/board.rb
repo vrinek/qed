@@ -37,13 +37,16 @@ class Board
     x = input.get_mouse_x
     y = input.get_mouse_y
 
+    clicked_tile = tile_in(x, y, container)
+
     case
     when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
-      left_click_tile(x, y, container)
+      clicked_tile.left_click
     when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
-      right_click_tile(x, y, container)
+      clicked_tile.right_click
     end
 
+    remove_dead_entities!
     update_entity_positions!
   end
 
@@ -53,6 +56,10 @@ class Board
 
   def selected_entity
     @selected_tile && @selected_tile.entity
+  end
+
+  def select_tile!(tile)
+    @selected_tile = tile
   end
 
   private
@@ -74,39 +81,6 @@ class Board
         tile.entity = nil
       end
     end
-  end
-
-  def left_click_tile(x, y, container)
-    clicked_tile = tile_in(x, y, container)
-
-    if selected_entity
-      # we had something selected, so we move it
-      begin
-        selected_entity.move(clicked_tile.x, clicked_tile.y)
-        # keep the entity selected
-      rescue Movable::OutOfRange
-        # deselect the entity and select the clicked tile
-      rescue Movable::OccupiedTile
-        # deselect the current entity and select the clicked tile
-      end
-    end
-
-    @selected_tile = clicked_tile
-  end
-
-  def right_click_tile(x, y, container)
-    clicked_tile = tile_in(x, y, container)
-    target_entity = clicked_tile.entity
-
-    if selected_entity && target_entity
-      begin
-        selected_entity.attack!(target_entity)
-      rescue Battleable::OutOfAttackRange
-      rescue Battleable::SameEntity
-      end
-    end
-
-    remove_dead_entities!
   end
 
   # return tile by absolute screen position

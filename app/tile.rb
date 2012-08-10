@@ -10,6 +10,32 @@ class Tile
     !!@entity
   end
 
+  def left_click
+    if $board.selected_entity
+      # we had something selected, so we move it
+      begin
+        $board.selected_entity.move(self.x, self.y)
+        # keep the entity selected
+      rescue Movable::OutOfRange
+        # deselect the entity and select the clicked tile
+      rescue Movable::OccupiedTile
+        # deselect the current entity and select the clicked tile
+      end
+    end
+
+    $board.select_tile! self
+  end
+
+  def right_click
+    if $board.selected_entity && entity
+      begin
+        $board.selected_entity.attack!(entity)
+      rescue Battleable::OutOfAttackRange
+      rescue Battleable::SameEntity
+      end
+    end
+  end
+
   def render(container, graphics, tw, th)
     graphics.setColor(color)
     graphics.draw_rect x*tw, y*th, tw-2, th-2
