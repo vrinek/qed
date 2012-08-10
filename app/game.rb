@@ -39,7 +39,7 @@ class Demo < BasicGame
     goblin.ac = 15
     goblin.hp = 30
 
-    $board << goblin.dup.tap{|g| g.move(3,9)}
+    $board << goblin.dup.tap{|g| g.move(3,2)}
     $board << goblin.dup.tap{|g| g.move(1,4)}
     $board << goblin.dup.tap{|g| g.move(1,7)}
 
