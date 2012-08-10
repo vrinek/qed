@@ -26,16 +26,13 @@ class Board
   def update(container, delta)
     input = container.get_input
 
+    x = input.get_mouse_x
+    y = input.get_mouse_y
+
     case
     when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
-      x = input.get_mouse_x
-      y = input.get_mouse_y
-
       left_click_tile(x, y, container)
     when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
-      x = input.get_mouse_x
-      y = input.get_mouse_y
-
       right_click_tile(x, y, container)
     end
 
