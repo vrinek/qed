@@ -1,7 +1,7 @@
 require 'tile'
 
 class Board
-  attr_reader :width, :height, :selected_tile
+  attr_reader :width, :height, :selected_tile, :tiles
 
   def initialize(options = {})
     @width = options.delete(:width) || 20
@@ -28,7 +28,7 @@ class Board
   end
 
   def <<(entity)
-    @tiles[entity.x][entity.y].entity = entity
+    tile(entity.x, entity.y).entity = entity
   end
 
   def update(container, delta)
@@ -50,16 +50,16 @@ class Board
     update_entity_positions!
   end
 
-  def occupied_tile?(x, y)
-    @tiles[x][y].occupied?
-  end
-
   def selected_entity
     @selected_tile && @selected_tile.entity
   end
 
   def select_tile!(tile)
     @selected_tile = tile
+  end
+
+  def tile(x, y)
+    @tiles[x][y]
   end
 
   private
@@ -88,6 +88,6 @@ class Board
     tile_x = x/Tile.width(container)
     tile_y = y/Tile.height(container)
 
-    @tiles[tile_x][tile_y]
+    tile(tile_x, tile_y)
   end
 end

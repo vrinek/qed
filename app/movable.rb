@@ -7,7 +7,7 @@ module Movable
       raise OutOfBoard
     end
 
-    if $board.occupied_tile?(x, y)
+    if $board.tile(x, y).occupied?
       raise OccupiedTile
     end
 
