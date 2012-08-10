@@ -127,6 +127,10 @@ class Board
       @width.times do |x|
         if @selected_tile == [x, y]
           graphics.setColor Color.green
+        elsif selected_entity &&
+          selected_entity.in_range?(x, y, selected_entity.atk_range)
+
+          graphics.setColor Color.red
         elsif selected_entity && selected_entity.in_range?(x, y)
           graphics.setColor Color.blue
         else
