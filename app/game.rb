@@ -28,7 +28,7 @@ class Demo < BasicGame
   # method prototype, it's good practice to fill out all necessary
   # methods even with empty definitions.
   def init(container)
-    $board = Board.new
+    $board = Board.new width: 20, height: 10
 
     goblin = Monster.new(name: 'goblin', image_path: 'assets/goblin.png')
     goblin.range = 4
