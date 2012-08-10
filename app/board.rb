@@ -56,8 +56,15 @@ class Board
 
     if selected_entity
       # we had something selected, so we move it
-      selected_entity.move(tile_x, tile_y)
-      @selected_tile = nil
+      begin
+        selected_entity.move(tile_x, tile_y)
+
+        # keep the entity selected
+        @selected_tile = [tile_x, tile_y]
+      rescue Movable::OutOfRange
+        # deselect the entity
+        @selected_tile = nil
+      end
     else
       @selected_tile = [tile_x, tile_y]
     end
@@ -81,7 +88,9 @@ class Board
     @height.times do |y|
       @width.times do |x|
         if @selected_tile == [x, y]
-          graphics.setColor Color.red
+          graphics.setColor Color.green
+        elsif selected_entity && selected_entity.in_range?(x, y)
+          graphics.setColor Color.blue
         else
           graphics.setColor Color.gray
         end

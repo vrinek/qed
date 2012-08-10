@@ -31,12 +31,14 @@ class Demo < BasicGame
     $board = Board.new
 
     goblin = Monster.new(name: 'goblin', image_path: 'assets/goblin.png')
+    goblin.range = 4
 
     $board << goblin.dup.tap{|g| g.move(3,9)}
     $board << goblin.dup.tap{|g| g.move(1,4)}
     $board << goblin.dup.tap{|g| g.move(1,7)}
 
     warrior = Character.new name: 'warrior', image_path: 'assets/warrior.png'
+    warrior.range = 3
 
     $board << warrior.dup.tap{|w| w.move(18,5)}
   end
