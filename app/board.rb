@@ -76,10 +76,10 @@ class Board
   end
 
   def remove_dead_entities!
-    @tiles.flatten.each do |tile|
-      if tile.entity.respond_to?(:dead?) && tile.entity.dead?
-        tile.entity = nil
-      end
+    @tiles.flatten.select do |tile|
+      tile.entity.respond_to?(:dead?) && tile.entity.dead?
+    end.each do |tile|
+      tile.entity = nil
     end
   end
 
