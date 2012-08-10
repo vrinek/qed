@@ -101,6 +101,7 @@ class Board
       begin
         selected_entity.attack!(target_entity)
       rescue Battleable::OutOfAttackRange
+      rescue Battleable::SameEntity
       end
     end
 

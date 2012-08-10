@@ -15,6 +15,10 @@ module Battleable
       raise OutOfAttackRange
     end
 
+    if entity == self
+      raise SameEntity
+    end
+
     entity.take_dmg!(dmg_to(entity))
   end
 
@@ -37,4 +41,5 @@ module Battleable
 
   class OutOfAttackRange < Exception; end
   class NotAttackable < Exception; end
+  class SameEntity < Exception; end
 end
