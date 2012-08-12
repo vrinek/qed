@@ -1,7 +1,7 @@
 require 'tile'
 
 class Board
-  attr_reader :width, :height, :selected_tile, :tiles
+  attr_reader :width, :height, :selected_tile, :tiles, :hovered_tile
 
   def initialize(options = {})
     @width = options.delete(:width) || 20
@@ -37,13 +37,13 @@ class Board
     x = input.get_mouse_x
     y = input.get_mouse_y
 
-    clicked_tile = tile_in(x, y, container)
+    @hovered_tile = tile_in(x, y, container)
 
     case
     when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
-      clicked_tile.left_click
+      @hovered_tile.left_click
     when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
-      clicked_tile.right_click
+      @hovered_tile.right_click
     end
 
     remove_dead_entities!

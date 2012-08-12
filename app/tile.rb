@@ -40,6 +40,10 @@ class Tile
     graphics.setColor(color)
     graphics.draw_rect x*tw, y*th, tw-2, th-2
 
+    if under_mouse?
+      graphics.fill_rect x*tw, y*th, tw-2, th-2
+    end
+
     entity.image.draw(entity.x*tw, entity.y*th, tw, th) if entity
   end
 
@@ -52,6 +56,10 @@ class Tile
   end
 
   private
+
+  def under_mouse?
+    $board.hovered_tile == self
+  end
 
   def selected?
     $board.selected_tile == self
