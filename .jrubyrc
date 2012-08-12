@@ -1,0 +1,4 @@
+## https://github.com/jruby/jruby/wiki/ConfiguringJRuby
+
+# Specify the major Ruby version to be compatible with. Default is 1.9.
+compat.version=1.9
