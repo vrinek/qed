@@ -1,0 +1,10 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/kostaskarachalios/Code/qed",
+      "folder_exclude_patterns": [".sublime", "assets", "lib", "linux-bin"],
+      "file_exclude_patterns": ["*.jnilib"]
+		}
+	]
+}
