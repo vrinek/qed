@@ -11,6 +11,8 @@ class Board
     @width = map.delete('width')
     @height = map.delete('height')
 
+    @translation = map.delete('translation')
+
     @tiles = Array.new(@width['tiles']) do |x|
       Array.new(@height['tiles']) do |y|
         Tile.new(x, y)
@@ -27,6 +29,7 @@ class Board
   end
 
   def render(container, graphics)
+    graphics.translate(@translation[:x], @translation[:y])
     prev_color = graphics.getColor
 
     th = Tile.height
@@ -37,6 +40,7 @@ class Board
     end
 
     graphics.setColor prev_color
+    graphics.translate(-@translation[:x], -@translation[:y])
   end
 
   def <<(entity)
@@ -46,8 +50,8 @@ class Board
   def update(container, delta)
     input = container.get_input
 
-    x = input.get_mouse_x
-    y = input.get_mouse_y
+    x = input.get_mouse_x - @translation[:x]
+    y = input.get_mouse_y - @translation[:y]
 
     if @hovered_tile = tile_in(x, y)
       case

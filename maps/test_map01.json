@@ -6,6 +6,7 @@
   "height": {
     "tiles": 12, "pixels": 480
   },
+  "translation": {"x": 20, "y": 20},
   "entities": [
     {
       "x": 3, "y": 2,
