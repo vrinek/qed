@@ -1,15 +1,18 @@
 require 'tile'
 
 class Board
+  attr_reader :name
   attr_reader :width, :height
   attr_reader :selected_tile, :tiles, :hovered_tile
 
   def initialize(map)
+    @name = map.delete('name')
+
     @width = map.delete('width')
     @height = map.delete('height')
 
-    @tiles = Array.new(@width) do |x|
-      Array.new(@height) do |y|
+    @tiles = Array.new(@width['tiles']) do |x|
+      Array.new(@height['tiles']) do |y|
         Tile.new(x, y)
       end
     end
@@ -24,11 +27,11 @@ class Board
   end
 
   def render(container, graphics)
-    th = Tile.height(container)
-    tw = Tile.width(container)
+    th = Tile.height
+    tw = Tile.width
 
     @tiles.flatten.each do |tile|
-      tile.render(container, graphics, tw, th)
+      tile.render(graphics)
     end
   end
 
@@ -42,13 +45,13 @@ class Board
     x = input.get_mouse_x
     y = input.get_mouse_y
 
-    @hovered_tile = tile_in(x, y, container)
-
-    case
-    when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
-      @hovered_tile.left_click
-    when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
-      @hovered_tile.right_click
+    if @hovered_tile = tile_in(x, y)
+      case
+      when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
+        @hovered_tile.left_click
+      when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
+        @hovered_tile.right_click
+      end
     end
 
     remove_dead_entities!
@@ -64,7 +67,8 @@ class Board
   end
 
   def tile(x, y)
-    @tiles[x][y]
+    row = @tiles[x]
+    row[y] if row
   end
 
   private
@@ -89,9 +93,11 @@ class Board
   end
 
   # return tile by absolute screen position
-  def tile_in(x, y, container)
-    tile_x = x/Tile.width(container)
-    tile_y = y/Tile.height(container)
+  def tile_in(x, y)
+    tile_x = x/Tile.width
+    tile_y = y/Tile.height
+
+    return nil if tile_x < 0 || tile_y < 0
 
     tile(tile_x, tile_y)
   end

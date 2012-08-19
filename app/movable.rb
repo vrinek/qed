@@ -3,7 +3,7 @@ module Movable
   attr_accessor :range
 
   def move(x, y)
-    if x < 0 || y < 0 || x > $board.width-1 || y > $board.height-1
+    if x < 0 || y < 0 || x > $board.width['tiles']-1 || y > $board.height['tiles']-1
       raise OutOfBoard
     end
 
