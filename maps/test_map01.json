@@ -1,6 +1,11 @@
 {
   "name": "TestMap01",
-  "width": 20, "height": 10,
+  "width": {
+    "tiles": 20, "pixels": 800
+  },
+  "height": {
+    "tiles": 12, "pixels": 480
+  },
   "entities": [
     {
       "x": 3, "y": 2,

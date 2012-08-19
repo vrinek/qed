@@ -36,7 +36,10 @@ class Tile
     end
   end
 
-  def render(container, graphics, tw, th)
+  def render(graphics)
+    th = Tile.height
+    tw = Tile.width
+
     graphics.setColor(color)
     graphics.draw_rect x*tw, y*th, tw-2, th-2
 
@@ -47,12 +50,12 @@ class Tile
     entity.image.draw(entity.x*tw, entity.y*th, tw, th) if entity
   end
 
-  def self.width(container)
-    container.width / $board.width
+  def self.width
+    $board.width['pixels'] / $board.width['tiles']
   end
 
-  def self.height(container)
-    container.height / $board.height
+  def self.height
+    $board.height['pixels'] / $board.height['tiles']
   end
 
   private
