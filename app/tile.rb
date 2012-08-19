@@ -44,7 +44,9 @@ class Tile
       graphics.fill_rect x*tw+1, y*th+1, tw-3, th-3
     end
 
-    entity.image.draw(entity.x*tw, entity.y*th, tw, th) if entity
+    if entity
+      entity.render(tw, th)
+    end
   end
 
   def self.width(container)
