@@ -1,7 +1,8 @@
 require 'tile'
 
 class Board
-  attr_reader :width, :height, :selected_tile, :tiles, :hovered_tile
+  attr_reader :width, :height
+  attr_reader :selected_tile, :tiles, :hovered_tile
 
   def initialize(map)
     @width = map.delete('width')
