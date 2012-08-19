@@ -4,9 +4,9 @@ require 'battle/damage_dice'
 module Battleable
   attr_accessor :atk_mod, :atk_range
   attr_accessor :dmg_dice, :dmg_mod
-  attr_accessor :ac, :hp
+  attr_accessor :ac
 
-  attr_reader :total_hp
+  attr_reader :total_hp, :hp
 
   def attack!(entity)
     if !entity.respond_to?(:hp)
