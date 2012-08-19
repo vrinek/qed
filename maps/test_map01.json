@@ -31,7 +31,7 @@
       "dmg_dice": 6,
       "dmg_mod": 5,
       "ac": 15,
-      "hp": 30
+      "total_hp": 30
     },
     {
       "id": 2,
@@ -44,7 +44,7 @@
       "dmg_dice": 10,
       "dmg_mod": 2,
       "ac": 15,
-      "hp": 24
+      "total_hp": 24
     }
   ]
 }

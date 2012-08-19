@@ -6,6 +6,8 @@ module Battleable
   attr_accessor :dmg_dice, :dmg_mod
   attr_accessor :ac, :hp
 
+  attr_reader :total_hp
+
   def attack!(entity)
     if !entity.respond_to?(:hp)
       raise NotAttackable
@@ -31,12 +33,33 @@ module Battleable
 
   def take_dmg!(dmg)
     @hp -= dmg
-
-    puts "#{@name} HP: #{@hp}"
   end
 
   def dead?
     hp <= 0
+  end
+
+  def total_hp=(amount)
+    @total_hp = amount
+    @hp = amount
+  end
+
+  def hp_portion
+    @hp/@total_hp.to_f
+  end
+
+  def render_hp_bar(graphics, tw, th)
+    # red part
+    graphics.set_color Color.red
+    graphics.fill_rect(x*tw+2, y*th-4, tw-4, 4)
+
+    # green part
+    graphics.set_color Color.green
+    graphics.fill_rect(x*tw+2, y*th-4, (tw-4)*hp_portion, 4)
+
+    # border
+    graphics.set_color Color.white
+    graphics.draw_rect(x*tw+2, y*th-4, tw-4, 4)
   end
 
   class OutOfAttackRange < Exception; end

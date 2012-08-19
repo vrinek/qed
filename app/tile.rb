@@ -46,6 +46,10 @@ class Tile
 
     if entity
       entity.render(tw, th)
+
+      if entity.respond_to?(:hp) && under_mouse?
+        entity.render_hp_bar(graphics, tw, th)
+      end
     end
   end
 
