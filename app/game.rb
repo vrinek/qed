@@ -68,6 +68,8 @@ class Demo < BasicGame
     case
     when input.is_key_down(Input::KEY_Q)
       container.exit
+    when input.is_key_pressed(Input::KEY_R)
+      container.reinit
     end
 
     $board.update(container, delta)
