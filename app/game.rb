@@ -5,9 +5,12 @@ $: << lib_path << app_path
 # jruby
 require 'java'
 
-# libraries
+# java libraries
 require 'lwjgl.jar'
 require 'slick.jar'
+
+# ruby standard libraries
+require 'json'
 
 java_import org.newdawn.slick.BasicGame
 java_import org.newdawn.slick.GameContainer
@@ -28,31 +31,16 @@ class Demo < BasicGame
   # method prototype, it's good practice to fill out all necessary
   # methods even with empty definitions.
   def init(container)
-    $board = Board.new width: 20, height: 10
+    map = JSON.parse(File.open('maps/test_map01.json').read)
 
-    goblin = Monster.new(name: 'goblin', image_path: 'assets/goblin.png')
-    goblin.range = 4
-    goblin.atk_mod = 6
-    goblin.atk_range = 3
-    goblin.dmg_dice = 6
-    goblin.dmg_mod = 5
-    goblin.ac = 15
-    goblin.hp = 30
+    # initialize the map
+    $board = Board.new map
 
-    $board << goblin.dup.tap{|g| g.move(3,2)}
-    $board << goblin.dup.tap{|g| g.move(1,4)}
-    $board << goblin.dup.tap{|g| g.move(1,7)}
+    # create the creatures (as prototypes)
+    Creature.bulk_create(map['creatures'])
 
-    warrior = Character.new name: 'warrior', image_path: 'assets/warrior.png'
-    warrior.range = 3
-    warrior.atk_mod = 4
-    warrior.atk_range = 1
-    warrior.dmg_dice = 10
-    warrior.dmg_mod = 2
-    warrior.ac = 15
-    warrior.hp = 24
-
-    $board << warrior.dup.tap{|w| w.move(18,5)}
+    # instantiate the creatures and move them into position
+    $board.initialize_entities(map['entities'])
   end
 
   def render(container, graphics)

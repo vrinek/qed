@@ -3,14 +3,22 @@ require 'tile'
 class Board
   attr_reader :width, :height, :selected_tile, :tiles, :hovered_tile
 
-  def initialize(options = {})
-    @width = options.delete(:width) || 20
-    @height = options.delete(:height) || 10
+  def initialize(map)
+    @width = map.delete('width')
+    @height = map.delete('height')
 
     @tiles = Array.new(@width) do |x|
       Array.new(@height) do |y|
         Tile.new(x, y)
       end
+    end
+  end
+
+  def initialize_entities(entities)
+    entities.each do |entity|
+      self << $creatures[entity["creature_id"]].dup.tap {|e|
+        e.move entity["x"], entity["y"]
+      }
     end
   end
 
