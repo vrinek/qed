@@ -37,14 +37,20 @@ class Tile
   end
 
   def render(container, graphics, tw, th)
-    graphics.setColor(color)
-    graphics.draw_rect x*tw, y*th, tw-2, th-2
+    graphics.set_color(color)
+    graphics.draw_rect x*tw+1, y*th+1, tw-3, th-3
 
     if under_mouse?
-      graphics.fill_rect x*tw, y*th, tw-2, th-2
+      graphics.fill_rect x*tw+1, y*th+1, tw-3, th-3
     end
 
-    entity.image.draw(entity.x*tw, entity.y*th, tw, th) if entity
+    if entity
+      entity.render(tw, th)
+
+      if entity.respond_to?(:hp) && under_mouse?
+        entity.render_hp_bar(graphics, tw, th)
+      end
+    end
   end
 
   def self.width(container)

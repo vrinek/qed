@@ -29,4 +29,8 @@ class Creature
       hash
     end
   end
+
+  def render(tw, th)
+    image.draw(x*tw, y*th, tw, th)
+  end
 end
