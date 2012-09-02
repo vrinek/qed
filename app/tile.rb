@@ -51,11 +51,11 @@ class Tile
   end
 
   def self.width
-    $board.width['pixels'] / $board.width['tiles']
+    $board.width[:pixels] / $board.width[:tiles]
   end
 
   def self.height
-    $board.height['pixels'] / $board.height['tiles']
+    $board.height[:pixels] / $board.height[:tiles]
   end
 
   private

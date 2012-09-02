@@ -5,16 +5,22 @@ class Board
   attr_reader :width, :height
   attr_reader :selected_tile, :tiles, :hovered_tile
 
-  def initialize(map)
+  def initialize(map, viewport)
     @name = map.delete('name')
 
-    @width = map.delete('width')
-    @height = map.delete('height')
+    @width = {
+      pixels: viewport.delete(:width),
+      tiles: map.delete('width')
+    }
+    @height = {
+      pixels: viewport.delete(:height),
+      tiles: map.delete('height')
+    }
 
-    @translation = map.delete('translation')
+    @translation = viewport.delete(:translation)
 
-    @tiles = Array.new(@width['tiles']) do |x|
-      Array.new(@height['tiles']) do |y|
+    @tiles = Array.new(@width[:tiles]) do |x|
+      Array.new(@height[:tiles]) do |y|
         Tile.new(x, y)
       end
     end
