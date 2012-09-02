@@ -5,16 +5,22 @@ class Board
   attr_reader :width, :height
   attr_reader :selected_tile, :tiles, :hovered_tile
 
-  def initialize(map)
+  def initialize(map, viewport)
     @name = map.delete('name')
 
-    @width = map.delete('width')
-    @height = map.delete('height')
+    @width = {
+      pixels: viewport.delete(:width),
+      tiles: map.delete('width')
+    }
+    @height = {
+      pixels: viewport.delete(:height),
+      tiles: map.delete('height')
+    }
 
-    @translation = map.delete('translation')
+    @translation = viewport.delete(:translation)
 
-    @tiles = Array.new(@width['tiles']) do |x|
-      Array.new(@height['tiles']) do |y|
+    @tiles = Array.new(@width[:tiles]) do |x|
+      Array.new(@height[:tiles]) do |y|
         Tile.new(x, y)
       end
     end
@@ -29,7 +35,7 @@ class Board
   end
 
   def render(container, graphics)
-    graphics.translate(@translation['x'], @translation['y'])
+    graphics.translate(@translation[:x], @translation[:y])
 
     th = Tile.height
     tw = Tile.width
@@ -38,7 +44,7 @@ class Board
       tile.render(graphics)
     end
 
-    graphics.translate(-@translation['x'], -@translation['y'])
+    graphics.translate(-@translation[:x], -@translation[:y])
   end
 
   def <<(entity)
@@ -48,8 +54,8 @@ class Board
   def update(container, delta)
     input = container.get_input
 
-    x = input.get_mouse_x - @translation['x']
-    y = input.get_mouse_y - @translation['y']
+    x = input.get_mouse_x - @translation[:x]
+    y = input.get_mouse_y - @translation[:y]
 
     if @hovered_tile = tile_in(x, y)
       case

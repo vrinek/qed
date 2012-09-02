@@ -9,8 +9,13 @@ class Demo < BasicGame
   def init(container)
     map = load_map('test_map01.json')
 
+    viewport = {
+      width: 800, height: 480,
+      translation: {x: 20, y: 20}
+    }
+
     # initialize the map
-    $board = Board.new map
+    $board = Board.new map, viewport
 
     # create the creatures (as prototypes)
     Creature.bulk_create(map['creatures'])
