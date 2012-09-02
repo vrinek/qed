@@ -1,14 +1,26 @@
 require 'tile'
 
 class Board
-  attr_reader :width, :height, :selected_tile, :tiles, :hovered_tile
+  attr_reader :name
+  attr_reader :width, :height
+  attr_reader :selected_tile, :tiles, :hovered_tile
 
-  def initialize(map)
-    @width = map.delete('width')
-    @height = map.delete('height')
+  def initialize(map, viewport)
+    @name = map.delete('name')
 
-    @tiles = Array.new(@width) do |x|
-      Array.new(@height) do |y|
+    @width = {
+      pixels: viewport.delete(:width),
+      tiles: map.delete('width')
+    }
+    @height = {
+      pixels: viewport.delete(:height),
+      tiles: map.delete('height')
+    }
+
+    @translation = viewport.delete(:translation)
+
+    @tiles = Array.new(@width[:tiles]) do |x|
+      Array.new(@height[:tiles]) do |y|
         Tile.new(x, y)
       end
     end
@@ -23,16 +35,18 @@ class Board
   end
 
   def render(container, graphics)
+    graphics.translate(@translation[:x], @translation[:y])
     prev_color = graphics.getColor
 
-    th = Tile.height(container)
-    tw = Tile.width(container)
+    th = Tile.height
+    tw = Tile.width
 
     @tiles.flatten.each do |tile|
-      tile.render(container, graphics, tw, th)
+      tile.render(graphics)
     end
 
     graphics.setColor prev_color
+    graphics.translate(-@translation[:x], -@translation[:y])
   end
 
   def <<(entity)
@@ -42,16 +56,16 @@ class Board
   def update(container, delta)
     input = container.get_input
 
-    x = input.get_mouse_x
-    y = input.get_mouse_y
+    x = input.get_mouse_x - @translation[:x]
+    y = input.get_mouse_y - @translation[:y]
 
-    @hovered_tile = tile_in(x, y, container)
-
-    case
-    when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
-      @hovered_tile.left_click
-    when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
-      @hovered_tile.right_click
+    if @hovered_tile = tile_in(x, y)
+      case
+      when input.is_mouse_pressed(Input::MOUSE_LEFT_BUTTON)
+        @hovered_tile.left_click
+      when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
+        @hovered_tile.right_click
+      end
     end
 
     remove_dead_entities!
@@ -67,7 +81,8 @@ class Board
   end
 
   def tile(x, y)
-    @tiles[x][y]
+    row = @tiles[x]
+    row[y] if row
   end
 
   private
@@ -92,9 +107,11 @@ class Board
   end
 
   # return tile by absolute screen position
-  def tile_in(x, y, container)
-    tile_x = x/Tile.width(container)
-    tile_y = y/Tile.height(container)
+  def tile_in(x, y)
+    tile_x = x/Tile.width
+    tile_y = y/Tile.height
+
+    return nil if tile_x < 0 || tile_y < 0
 
     tile(tile_x, tile_y)
   end

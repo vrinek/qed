@@ -33,8 +33,13 @@ class Demo < BasicGame
   def init(container)
     map = JSON.parse(File.open('maps/test_map01.json').read)
 
+    viewport = {
+      width: 800, height: 480,
+      translation: {x: 20, y: 20}
+    }
+
     # initialize the map
-    $board = Board.new map
+    $board = Board.new map, viewport
 
     # create the creatures (as prototypes)
     Creature.bulk_create(map['creatures'])
@@ -65,5 +70,5 @@ class Demo < BasicGame
 end
 
 app = AppGameContainer.new(Demo.new('SlickDemo'))
-app.set_display_mode(800, 400, false)
+app.set_display_mode(1000, 520, false)
 app.start
