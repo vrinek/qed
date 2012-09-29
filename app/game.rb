@@ -7,7 +7,7 @@ class Demo < BasicGame
   # method prototype, it's good practice to fill out all necessary
   # methods even with empty definitions.
   def init(container)
-    map = JSON.parse(File.open('maps/test_map01.json').read)
+    map = load_map('test_map01.json')
 
     # initialize the map
     $board = Board.new map
@@ -37,5 +37,13 @@ class Demo < BasicGame
     end
 
     $board.update(container, delta)
+  end
+
+  private
+
+  def load_map(filename)
+    json = File.open(File.join('maps', filename)).read
+
+    Gson.new.from_json json, Hash.new.to_java.java_class
   end
 end

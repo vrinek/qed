@@ -9,8 +9,21 @@ require 'java'
 require 'lwjgl.jar'
 require 'slick.jar'
 
-# ruby standard libraries
-require 'json'
+# for JSON parsing
+require 'gson.jar'
+class Gson
+  include_package "com.google.gson"
+
+  def initialize
+    @gson = GsonBuilder.new.
+      setFieldNamingPolicy(FieldNamingPolicy::LOWER_CASE_WITH_UNDERSCORES).
+      serializeNulls.create
+  end
+
+  def method_missing(method_name, *args)
+    @gson.send(method_name, *args)
+  end
+end
 
 java_import org.newdawn.slick.BasicGame
 java_import org.newdawn.slick.GameContainer
