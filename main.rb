@@ -6,11 +6,11 @@ $: << lib_path << app_path
 require 'java'
 
 # java libraries
-require 'lwjgl.jar'
-require 'slick.jar'
+require 'lwjgl'
+require 'slick'
 
 # for JSON parsing
-require 'gson.jar'
+require 'gson'
 class Gson
   include_package "com.google.gson"
 
