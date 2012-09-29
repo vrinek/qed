@@ -36,6 +36,13 @@ module Movable
     (dx - dy).abs + 1.5 * [dx,dy].min
   end
 
+  def closest(klass)
+    $board.entities.
+      select{|entity| entity.is_a?(klass)}.
+      sort_by{|entity| distance(entity.x, entity.y) }.
+      first
+  end
+
   class OutOfBoard < Exception; end
   class OutOfRange < Exception; end
   class OccupiedTile < Exception; end

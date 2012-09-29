@@ -33,4 +33,9 @@ class Creature
   def render(tw, th)
     image.draw(x*tw, y*th, tw, th)
   end
+
+  # To be replaced by AI
+  def target
+    nil
+  end
 end

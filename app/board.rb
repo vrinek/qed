@@ -85,6 +85,21 @@ class Board
     row[y] if row
   end
 
+  def entities
+    tiles.flatten.map(&:entity).compact
+  end
+
+  def end_turn
+    entities.reject(&:player_controlled?).each do |enemy|
+      if tile = enemy.next_move
+        enemy.move(tile.x, tile.y)
+        update_entity_positions!
+      elsif target = enemy.next_attack
+        enemy.attack!(target)
+      end
+    end
+  end
+
   private
 
   def update_entity_positions!

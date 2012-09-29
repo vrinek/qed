@@ -39,6 +39,8 @@ class Demo < BasicGame
       container.exit
     when input.is_key_pressed(Input::KEY_R)
       container.reinit
+    when input.is_key_pressed(Input::KEY_ENTER)
+      $board.end_turn
     end
 
     $board.update(container, delta)
