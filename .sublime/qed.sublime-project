@@ -4,7 +4,7 @@
 		{
 			"path": "/Users/kostaskarachalios/Code/qed",
       "folder_exclude_patterns": [
-        ".sublime", "assets", "lib", "linux-bin", "src", "package"
+        ".sublime", "assets", "lib/java", "linux-bin", "src", "package"
       ],
       "file_exclude_patterns": ["*.jnilib"]
 		}

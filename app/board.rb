@@ -71,7 +71,9 @@ class Board
   end
 
   def selected_entity
-    @selected_tile && @selected_tile.entity
+    if @selected_tile.try(:entity).try(:player_controlled?)
+      @selected_tile.entity
+    end
   end
 
   def select_tile!(tile)
