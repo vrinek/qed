@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ "$(uname)" = "Darwin" ]; then
-  ruby app/game.rb
+  ruby main.rb
 else
-  LD_LIBRARY_PATH=$(pwd)/linux-bin ruby app/game.rb
+  LD_LIBRARY_PATH=$(pwd)/linux-bin ruby main.rb
 fi
