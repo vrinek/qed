@@ -39,5 +39,5 @@ require './app/game'
 
 # start up the game
 app = AppGameContainer.new(Demo.new('SlickDemo'))
-app.set_display_mode(800, 400, false)
+app.set_display_mode(1000, 520, false)
 app.start

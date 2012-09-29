@@ -1,6 +1,6 @@
 {
   "name": "TestMap01",
-  "width": 20, "height": 10,
+  "width": 20, "height": 12,
   "entities": [
     {
       "x": 3, "y": 2,
