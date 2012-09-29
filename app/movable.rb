@@ -29,7 +29,11 @@ module Movable
 
   # Square distance
   def distance(x, y)
-    [(x - self.x).abs, (y - self.y).abs].max
+    dx = (x - self.x).abs
+    dy = (y - self.y).abs
+
+    # Octagonal distance
+    (dx - dy).abs + 1.5 * [dx,dy].min
   end
 
   class OutOfBoard < Exception; end
