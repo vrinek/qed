@@ -28,17 +28,17 @@
       "range": 4,
       "atk_mod": 6,
       "atk_range": 3,
-      "dmg_dice": 6,
+      "dmg_dice": 4,
       "dmg_mod": 5,
       "ac": 15,
-      "total_hp": 30
+      "total_hp": 10
     },
     {
       "id": 2,
       "name": "Warrior",
       "type": "Character",
       "image_path": "assets/warrior.png",
-      "range": 3,
+      "range": 5,
       "atk_mod": 4,
       "atk_range": 1,
       "dmg_dice": 10,
