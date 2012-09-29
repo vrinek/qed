@@ -1,4 +1,4 @@
-lib_path = File.expand_path('../lib', __FILE__)
+lib_path = File.expand_path('../lib/java', __FILE__)
 app_path = File.expand_path('../app', __FILE__)
 $: << lib_path << app_path
 
