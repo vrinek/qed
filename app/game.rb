@@ -10,8 +10,8 @@ class Demo < BasicGame
     map = load_map('test_map01.json')
 
     viewport = {
-      width: 800, height: 480,
-      translation: {x: 20, y: 20}
+      :width => 800, :height => 480,
+      :translation => {:x => 20, :y => 20}
     }
 
     # initialize the map

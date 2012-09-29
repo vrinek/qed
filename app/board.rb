@@ -9,12 +9,12 @@ class Board
     @name = map.delete('name')
 
     @width = {
-      pixels: viewport.delete(:width),
-      tiles: map.delete('width')
+      :pixels => viewport.delete(:width),
+      :tiles => map.delete('width')
     }
     @height = {
-      pixels: viewport.delete(:height),
-      tiles: map.delete('height')
+      :pixels => viewport.delete(:height),
+      :tiles => map.delete('height')
     }
 
     @translation = viewport.delete(:translation)
