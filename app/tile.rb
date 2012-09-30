@@ -90,9 +90,9 @@ class Tile
     case
     when selected?
       Color.green
-    when in_attack_range?
+    when in_attack_range? && $board.selected_entity.try(:can_attack?)
       Color.red
-    when in_move_range?
+    when in_move_range? && $board.selected_entity.try(:can_move?)
       Color.blue
     else
       Color.gray
