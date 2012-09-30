@@ -77,7 +77,9 @@ class Tile
   end
 
   def in_attack_range?
-    $board.selected_entity.try(:in_range?, x, y, sel_entity.atk_range)
+    if sel_ent = $board.selected_entity
+      sel_ent.in_range?(x, y, sel_ent.atk_range)
+    end
   end
 
   def in_move_range?
