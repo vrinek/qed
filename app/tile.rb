@@ -42,11 +42,25 @@ class Tile
     th = Tile.height
     tw = Tile.width
 
-    graphics.setColor(color)
-    graphics.draw_rect x*tw+1, y*th+1, tw-3, th-3
-
     if under_mouse?
+      graphics.setColor(colors.last)
       graphics.fill_rect x*tw+1, y*th+1, tw-3, th-3
+    end
+
+    colors.each_with_index do |color, index|
+      graphics.setColor(color)
+
+      margin = 3 + 2*index
+      offset = 1 + index
+
+      args = [
+        x*tw+offset, # X position
+        y*th+offset, # Y position
+        tw-margin,   # width
+        th-margin    # height
+      ]
+
+      graphics.draw_rect *args
     end
 
     if entity
@@ -86,16 +100,21 @@ class Tile
     $board.selected_entity.try(:in_range?, x, y)
   end
 
-  def color
-    case
-    when selected?
-      Color.green
-    when in_attack_range? && $board.selected_entity.try(:can_attack?)
-      Color.red
-    when in_move_range? && $board.selected_entity.try(:can_move?)
-      Color.blue
-    else
-      Color.gray
+  def colors
+    colors = [Color.gray]
+
+    if in_move_range? && $board.selected_entity.try(:can_move?)
+      colors << Color.blue
     end
+
+    if in_attack_range? && $board.selected_entity.try(:can_attack?)
+      colors << Color.red
+    end
+
+    if selected?
+      colors << Color.green
+    end
+
+    colors
   end
 end
