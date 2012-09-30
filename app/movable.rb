@@ -2,10 +2,8 @@ module Movable
   attr_reader :x, :y
   attr_accessor :range
 
-  def initialize
-    @can_do << :move
-
-    super
+  def self.can_do
+    [:move]
   end
 
   def move(x, y)

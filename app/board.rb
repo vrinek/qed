@@ -30,6 +30,7 @@ class Board
     entities.each do |entity|
       self << $creatures[entity["creature_id"]].dup.tap {|e|
         e.move entity["x"], entity["y"]
+        e.initialize_actions
       }
     end
   end

@@ -6,23 +6,28 @@ class Creature
   include Battleable
 
   attr_reader :image
-  attr_reader :can_do, :done
 
   def initialize(options = {})
     @name = options.delete('name')
     @image = Image.new(options.delete('image_path'))
 
+    options.each do |key, value|
+      self.send(key + '=', value)
+    end
+  end
+
+  # `initialize` is called to instanciate the "blueprints" for the Creatures.
+  # To avoid having all instances of a blueprint point to the same arrays for
+  #   `@done` and `@can_do` we need to initialize them after they get
+  #   dupplicated from the blueprints.
+  def initialize_actions
     @can_do = []
     @done = []
 
-    # Calls the parents' `initialize` method (includes Movable and Battleable).
-    #
-    # @note `super` passes all arguments to the parent's method.  `super()`
-    #   passes no arguments to the parent.
-    super()
-
-    options.each do |key, value|
-      self.send(key + '=', value)
+    self.class.included_modules.each do |mod|
+      if mod.respond_to?(:can_do)
+        @can_do += mod.can_do
+      end
     end
   end
 

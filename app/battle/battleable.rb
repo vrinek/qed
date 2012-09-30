@@ -8,10 +8,8 @@ module Battleable
 
   attr_reader :total_hp, :hp
 
-  def initialize
-    @can_do << :attack
-
-    super
+  def self.can_do
+    [:attack]
   end
 
   def attack!(entity)
