@@ -90,14 +90,30 @@ class Board
     tiles.flatten.map(&:entity).compact
   end
 
-  def end_turn
-    entities.reject(&:player_controlled?).each do |enemy|
-      enemy.do_actions!
+  def start_enemy_turn
+    monsters.each(&:reset_actions)
+
+    monsters.each do |monster|
+      monster.do_actions!
       update_entity_positions!
     end
   end
 
+  def end_player_turn
+    start_enemy_turn
+
+    characters.each(&:reset_actions)
+  end
+
   private
+
+  def characters
+    entities.select(&:player_controlled?)
+  end
+
+  def monsters
+    entities.reject(&:player_controlled?)
+  end
 
   def update_entity_positions!
     @tiles.flatten.each do |tile|

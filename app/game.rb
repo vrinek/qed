@@ -40,7 +40,7 @@ class Demo < BasicGame
     when input.is_key_pressed(Input::KEY_R)
       container.reinit
     when input.is_key_pressed(Input::KEY_ENTER)
-      $board.end_turn
+      $board.end_player_turn
     end
 
     $board.update(container, delta)

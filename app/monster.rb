@@ -11,12 +11,12 @@ class Monster < Creature
   def do_actions!
     if can_move? && tile = next_move
       move(tile.x, tile.y)
-      @done << :move
+      consume_action :move
     end
 
     if can_attack? && target = next_attack
       attack!(target)
-      @done << :attack
+      consume_action :attack
     end
   end
 end

@@ -11,10 +11,11 @@ class Tile
   end
 
   def left_click
-    if $board.selected_entity
+    if $board.selected_entity.try(:can_move?)
       # we had something selected, so we move it
       begin
         $board.selected_entity.move(self.x, self.y)
+        $board.selected_entity.consume_action :move
         # keep the entity selected
       rescue Movable::OutOfRange
         # deselect the entity and select the clicked tile
@@ -27,9 +28,10 @@ class Tile
   end
 
   def right_click
-    if $board.selected_entity && entity
+    if $board.selected_entity.try(:can_attack?) && entity
       begin
         $board.selected_entity.attack!(entity)
+        $board.selected_entity.consume_action :attack
       rescue Battleable::OutOfAttackRange
       rescue Battleable::SameEntity
       end

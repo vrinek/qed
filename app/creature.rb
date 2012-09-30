@@ -31,6 +31,10 @@ class Creature
     end
   end
 
+  def reset_actions
+    @done = []
+  end
+
   def self.bulk_create(creatures)
     $creatures = creatures.inject(Hash.new) do |hash, creature|
       type = case creature.delete('type')
@@ -54,13 +58,28 @@ class Creature
     nil
   end
 
+  def consume_action(action)
+    @done << action
+  end
+
   def method_missing(method_name, *args, &block)
-    if method_name =~ /^can_/
-      action = method_name[/can_(.+)\?$/, 1].to_sym
+    if is_about_action?(method_name)
+      action = method_name[/^can_(.+)\?$/, 1].to_sym
 
       @can_do.include?(action) && !@done.include?(action)
     else
       super
     end
+  end
+
+  # We need to redefine `respond_to?` in order for `try` to work properly.
+  def respond_to?(method_name, *args)
+    is_about_action?(method_name) || super
+  end
+
+  private
+
+  def is_about_action?(method_name)
+    method_name =~ /^can_/
   end
 end
