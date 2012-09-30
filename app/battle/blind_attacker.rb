@@ -4,6 +4,7 @@ module BlindAttacker
   end
 
   def next_move
+    return nil unless target
     return nil if distance(target.x, target.y) <= atk_range
 
     $board.tiles.flatten.
@@ -17,6 +18,8 @@ module BlindAttacker
   end
 
   def next_attack
+    return nil unless target
+
     distance(target.x, target.y) <= atk_range && target
   end
 end
