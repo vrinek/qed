@@ -17,6 +17,10 @@
     {
       "x": 18, "y": 5,
       "creature_id": 2 // Warrior
+    },
+    {
+      "x": 18, "y": 4,
+      "creature_id": 3 // Wizard
     }
   ],
   "creatures": [
@@ -45,6 +49,19 @@
       "dmg_mod": 2,
       "ac": 15,
       "total_hp": 24
+    },
+    {
+      "id": 3,
+      "name": "Wizard",
+      "type": "Character",
+      "image_path": "assets/wizard.png",
+      "range": 3,
+      "atk_mod": 4,
+      "atk_range": 6,
+      "dmg_dice": 12,
+      "dmg_mod": 4,
+      "ac": 12,
+      "total_hp": 16
     }
   ]
 }
