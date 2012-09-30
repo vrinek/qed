@@ -6,10 +6,20 @@ class Creature
   include Battleable
 
   attr_reader :image
+  attr_reader :can_do, :done
 
   def initialize(options = {})
     @name = options.delete('name')
     @image = Image.new(options.delete('image_path'))
+
+    @can_do = []
+    @done = []
+
+    # Calls the parents' `initialize` method (includes Movable and Battleable).
+    #
+    # @note `super` passes all arguments to the parent's method.  `super()`
+    #   passes no arguments to the parent.
+    super()
 
     options.each do |key, value|
       self.send(key + '=', value)
@@ -37,5 +47,15 @@ class Creature
   # To be replaced by AI
   def target
     nil
+  end
+
+  def method_missing(method_name, *args, &block)
+    if method_name =~ /^can_/
+      action = method_name[/can_(.+)\?$/, 1].to_sym
+
+      @can_do.include?(action) && !@done.include?(action)
+    else
+      super
+    end
   end
 end

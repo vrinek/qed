@@ -2,6 +2,12 @@ module Movable
   attr_reader :x, :y
   attr_accessor :range
 
+  def initialize
+    @can_do << :move
+
+    super
+  end
+
   def move(x, y)
     if x < 0 || y < 0 || x > $board.width[:tiles]-1 || y > $board.height[:tiles]-1
       raise OutOfBoard

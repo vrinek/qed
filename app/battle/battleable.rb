@@ -8,6 +8,12 @@ module Battleable
 
   attr_reader :total_hp, :hp
 
+  def initialize
+    @can_do << :attack
+
+    super
+  end
+
   def attack!(entity)
     if !entity.respond_to?(:hp)
       raise NotAttackable

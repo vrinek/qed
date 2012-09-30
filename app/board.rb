@@ -91,10 +91,10 @@ class Board
 
   def end_turn
     entities.reject(&:player_controlled?).each do |enemy|
-      if tile = enemy.next_move
+      if enemy.can_move? && tile = enemy.next_move
         enemy.move(tile.x, tile.y)
         update_entity_positions!
-      elsif target = enemy.next_attack
+      elsif enemy.can_attack? && target = enemy.next_attack
         enemy.attack!(target)
       end
     end
