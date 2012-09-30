@@ -77,13 +77,11 @@ class Tile
   end
 
   def in_attack_range?
-    sel_entity = $board.selected_entity
-    sel_entity && sel_entity.in_range?(x, y, sel_entity.atk_range)
+    $board.selected_entity.try(:in_range?, x, y, sel_entity.atk_range)
   end
 
   def in_move_range?
-    sel_entity = $board.selected_entity
-    sel_entity && sel_entity.in_range?(x, y)
+    $board.selected_entity.try(:in_range?, x, y)
   end
 
   def color
