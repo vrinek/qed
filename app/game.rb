@@ -27,7 +27,8 @@ class Demo < BasicGame
   def render(container, graphics)
     $board.render(container, graphics)
 
-    graphics.draw_string('JRuby Demo (Q to quit)', 8, container.height - 30)
+    help_message = 'QED Demo (Q to quit, R to reset, ENTER to end turn)'
+    graphics.draw_string(help_message, 8, container.height - 20)
   end
 
   def update(container, delta)
