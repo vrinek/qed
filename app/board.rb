@@ -24,6 +24,9 @@ class Board
         Tile.new(x, y)
       end
     end
+
+    @turn = 0
+    @states = []
   end
 
   def initialize_entities(entities)
@@ -35,7 +38,7 @@ class Board
       }
     end
 
-    @last_state = current_state
+    save_state!
   end
 
   def render(container, graphics)
@@ -107,24 +110,53 @@ class Board
   end
 
   def end_player_turn
+    @turn += 1
+
     start_enemy_turn
 
     characters.each(&:reset_actions)
 
-    @last_state = current_state
+    save_state!
   end
 
   def undo_to_last_state
-    puts "Undoing to: #{@last_state.inspect}"
+    if last_state != current_state
+      roll_back_to(last_state)
+    elsif previous_state
+      roll_back_to(previous_state)
+      @turn -= 1
+    end
+  end
+
+  private
+
+  def roll_back_to(state)
+    puts "Undoing to: #{state.inspect}"
 
     # Clear all entities
     @tiles.flatten.each {|tile| tile.entity = nil }
 
     # Re-add all entities
-    $board.initialize_entities(@last_state)
+    $board.initialize_entities(state)
   end
 
-  private
+  def previous_state
+    return nil if @turn == 0
+
+    @states[@turn - 1]
+  end
+
+  def last_state
+    @states[@turn]
+  end
+
+  def save_state!
+    if @states.size > @turn
+      @states = @states[0..(@turn - 1)]
+    end
+
+    @states[@turn] = current_state
+  end
 
   def current_state
     entities.map(&:current_state)
