@@ -9,6 +9,5 @@ Currently it only supports Linux and OS X.
 
 ## TODO (immediate future)
 
-- Implement the turn-based gameplay
 - Add more levels
 - Package the game into a jar
