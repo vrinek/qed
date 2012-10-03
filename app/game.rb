@@ -1,6 +1,7 @@
 require 'board'
 require 'monster'
 require 'character'
+require 'hud'
 
 class Demo < BasicGame
   # Due to how Java decides which method to call based on its
@@ -22,13 +23,14 @@ class Demo < BasicGame
 
     # instantiate the creatures and move them into position
     $board.initialize_entities(map['entities'])
+
+    $hud = Hud.new
   end
 
   def render(container, graphics)
     $board.render(container, graphics)
 
-    help_message = 'QED Demo (Q to quit, R to reset, U to undo, ENTER to end turn)'
-    graphics.draw_string(help_message, 8, container.height - 20)
+    $hud.render(container, graphics)
   end
 
   def update(container, delta)
