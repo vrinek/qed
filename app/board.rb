@@ -107,6 +107,7 @@ class Board
     monsters.each do |monster|
       monster.do_actions!
       update_entity_positions!
+      remove_dead_entities!
     end
   end
 
