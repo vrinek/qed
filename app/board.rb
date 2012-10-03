@@ -133,8 +133,6 @@ class Board
   private
 
   def roll_back_to(state)
-    puts "Undoing to: #{state.inspect}"
-
     # Clear all entities
     @tiles.flatten.each {|tile| tile.entity = nil }
 
