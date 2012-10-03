@@ -10,6 +10,7 @@ class Creature
   def initialize(options = {})
     @name = options.delete('name')
     @image = Image.new(options.delete('image_path'))
+    @type_id = options.delete('id')
 
     options.each do |key, value|
       self.send(key + '=', value)
@@ -44,7 +45,7 @@ class Creature
         Character
       end
 
-      hash[creature.delete('id')] = type.new creature
+      hash[creature['id']] = type.new creature
       hash
     end
   end
@@ -75,6 +76,20 @@ class Creature
   # We need to redefine `respond_to?` in order for `try` to work properly.
   def respond_to?(method_name, *args)
     is_about_action?(method_name) || super
+  end
+
+  def current_state
+    state = {
+      'creature_id' => @type_id
+    }
+
+    self.class.included_modules.each do |mod|
+      if mod.respond_to?(:current_state)
+        state = state.merge(mod.current_state(self))
+      end
+    end
+
+    state
   end
 
   private

@@ -12,6 +12,12 @@ module Battleable
     [:attack]
   end
 
+  def self.current_state(battleable)
+    {
+      'hp' => battleable.hp
+    }
+  end
+
   def attack!(entity)
     if !entity.respond_to?(:hp)
       raise NotAttackable
@@ -64,6 +70,10 @@ module Battleable
     # border
     graphics.set_color Color.white
     graphics.draw_rect(x*tw+2, y*th-4, tw-4, 4)
+  end
+
+  def set_current_hp(hp)
+    @hp = hp
   end
 
   class OutOfAttackRange < Exception; end

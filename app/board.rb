@@ -30,9 +30,12 @@ class Board
     entities.each do |entity|
       self << $creatures[entity["creature_id"]].dup.tap {|e|
         e.move entity["x"], entity["y"]
+        e.set_current_hp(entity["hp"]) if entity["hp"]
         e.initialize_actions
       }
     end
+
+    @last_state = current_state
   end
 
   def render(container, graphics)
@@ -65,6 +68,10 @@ class Board
       when input.is_mouse_pressed(Input::MOUSE_RIGHT_BUTTON)
         @hovered_tile.right_click
       end
+    end
+
+    if input.is_key_pressed(Input::KEY_U)
+      $board.undo_to_last_state
     end
 
     remove_dead_entities!
@@ -103,9 +110,25 @@ class Board
     start_enemy_turn
 
     characters.each(&:reset_actions)
+
+    @last_state = current_state
+  end
+
+  def undo_to_last_state
+    puts "Undoing to: #{@last_state.inspect}"
+
+    # Clear all entities
+    @tiles.flatten.each {|tile| tile.entity = nil }
+
+    # Re-add all entities
+    $board.initialize_entities(@last_state)
   end
 
   private
+
+  def current_state
+    entities.map(&:current_state)
+  end
 
   def characters
     entities.select(&:player_controlled?)
