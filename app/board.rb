@@ -4,6 +4,7 @@ class Board
   attr_reader :name
   attr_reader :width, :height
   attr_reader :selected_tile, :tiles, :hovered_tile
+  attr_reader :turn
 
   def initialize(map, viewport)
     @name = map.delete('name')
