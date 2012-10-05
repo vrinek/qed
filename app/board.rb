@@ -11,12 +11,14 @@ class Board
 
     @width = {
       :pixels => viewport.delete(:width),
-      :tiles => map.delete('width')
+      :tiles => map.delete('width').to_i
     }
     @height = {
       :pixels => viewport.delete(:height),
-      :tiles => map.delete('height')
+      :tiles => map.delete('height').to_i
     }
+
+    warn_for_size
 
     @translation = viewport.delete(:translation)
 
@@ -202,5 +204,22 @@ class Board
     return nil if tile_x < 0 || tile_y < 0
 
     tile(tile_x, tile_y)
+  end
+
+  def warn_for_size
+    width_mod = @width[:pixels] % @width[:tiles]
+    tile_width = @width[:pixels] / @width[:tiles]
+    height_mod = @height[:pixels] % @height[:tiles]
+    tile_height = @height[:pixels] / @height[:tiles]
+
+    if width_mod != 0
+      puts "Width in pixels is not a direct multiple of the width in tiles!"
+      puts "#{@width[:pixels]} = #{@width[:tiles]} x #{tile_width} + #{width_mod}"
+    end
+
+    if height_mod != 0
+      puts "Height in pixels is not a direct multiple of the height in tiles!"
+      puts "#{@height[:pixels]} = #{@height[:tiles]} x #{tile_height} + #{height_mod}"
+    end
   end
 end
