@@ -130,6 +130,11 @@ class Board
     end
   end
 
+  def reset_to_first_state
+    roll_back_to(@states[0])
+    @turn = 0
+  end
+
   private
 
   def roll_back_to(state)

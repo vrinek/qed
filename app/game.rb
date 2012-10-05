@@ -41,7 +41,7 @@ class Demo < BasicGame
     when input.is_key_down(Input::KEY_Q)
       container.exit
     when input.is_key_pressed(Input::KEY_R)
-      container.reinit
+      $board.reset_to_first_state
     when input.is_key_pressed(Input::KEY_ENTER)
       $board.end_player_turn
     end
