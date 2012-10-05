@@ -6,6 +6,11 @@ class Board
   attr_reader :selected_tile, :tiles, :hovered_tile
   attr_reader :turn
 
+  # Instantiates the given map to the given viewport.
+  #
+  # @param map [Hash] map details, including size, entities and their starting
+  #   states
+  # @param viewport [Hash] position on the screen where the board will be drawn
   def initialize(map, viewport)
     @name = map.delete('name')
 
@@ -32,6 +37,7 @@ class Board
     @states = []
   end
 
+  # Instantiates the entities from the Creature prototypes that were created.
   def initialize_entities(entities)
     entities.each do |entity|
       self << $creatures[entity["creature_id"]].dup.tap {|e|
